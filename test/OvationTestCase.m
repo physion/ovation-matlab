@@ -1,6 +1,6 @@
 % Copyright (c) 2012 Physion Consulting LLC
 
-classdef TestMatlabSuite < TestCase
+classdef MatlabTestCase < TestCase
     
     properties
         context

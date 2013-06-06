@@ -1,10 +1,10 @@
 % Copyright (c) 2012 Physion Consulting LLC
 
-classdef TestSourceForInsertion < TestMatlabSuite
+classdef TestSourceForInsertion < MatlabTestCase
     
     methods
         function self = TestSourceForInsertion(name)
-             self = self@TestMatlabSuite(name);
+             self = self@MatlabTestCase(name);
         end
         
         function testCreatesNewSource(self)

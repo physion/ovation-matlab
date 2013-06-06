@@ -21,6 +21,12 @@ function s = arrayToSet(arr)
 
 	s = java.util.HashSet();
 	for i = 1:length(arr)
-		s.add(arr(i));
+		if(iscell(arr))
+			item = arr{i};
+		else
+			item = arr(i);
+		end
+
+		s.add(item);
 	end
 end

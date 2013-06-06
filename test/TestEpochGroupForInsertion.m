@@ -1,10 +1,10 @@
 % Copyright (c) 2012 Physion Consulting LLC
 
-classdef TestEpochGroupForInsertion < TestMatlabSuite
+classdef TestEpochGroupForInsertion < MatlabTestCase
     
     methods
         function self = TestEpochGroupForInsertion(name)
-             self = self@TestMatlabSuite(name);
+             self = self@MatlabTestCase(name);
         end
         
         function TestInsertsEpochGroup(self)
