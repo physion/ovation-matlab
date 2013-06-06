@@ -12,7 +12,11 @@ The Ovation Matlab API wraps the Ovation Java API for use by Matlab. Through thi
 
 ## Installation
 
-Add the folder containing `+ovation/` to the Matlab path.
+1. Add the folder containing `+ovation/` to the Matlab path.
+2. Add the Ovation "JAR with dependencies" library, to the __top__ of Matlab's `toolboxl/local/classpath.txt`.
+	1. Open `${matlabroot}/toolbox/local/classpath.txt` in a text editor such as TextEdit.app or Notepad.exe
+	2. Add the path to `ovation-assembly-2.0-jar-with-dependencies.jar` to the __top__ of this file
+
 
 ## Usage
 
