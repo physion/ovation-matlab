@@ -1,0 +1,15 @@
+% Converts an Ovation NumericMeasurement to a struct of vector/matrix
+% entries by data element name.
+
+function m = nm2data(nm)
+    
+    numeric_data = NumericDataElements.getNumericData(nm);
+    numeric_data = numeric_data.get();
+    data_map = numeric_data.getData();
+    
+    keys = i2array(data_map.keySet());
+    m = struct();
+    for i = 1:length(keys)
+        data = data_map.get(keys(i));
+        mdata.dataArray.copyToNDJavaArray();
+    

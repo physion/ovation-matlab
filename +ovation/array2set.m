@@ -1,4 +1,4 @@
-function s = arrayToSet(arr)
+function s = array2set(arr)
 % Converts an object array to a Java Set
 %
 %   set = arrayToSet(array)
@@ -10,7 +10,7 @@ function s = arrayToSet(arr)
 %
 %   >>> arr = [1,2,3];
 %   
-%   >>> arrayToSet(arr)
+%   >>> array2set(arr)
 %   
 %   ans =
 %    

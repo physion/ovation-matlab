@@ -1,4 +1,4 @@
-function arr = asarray(iterable)
+function arr = it2array(iterable)
 	% Creates a new Java array from a Java Iterable. Java arrays are
 	% treated like Matlab vectors within Matlab.
 	%
@@ -7,7 +7,7 @@ function arr = asarray(iterable)
 	% >> s = java.util.HashSet();
 	% >> s.add('hello');
 	% >> s.add('world!');
-	% >> arr = asarray(s)
+	% >> arr = it2array(s)
 	% ans =
 	%
 	% java.lang.Object[]:
