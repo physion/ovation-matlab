@@ -5,7 +5,7 @@
 
 function m = nm2data(nm)
     
-    import us.physion.ovation.NumericDataElements;
+    import us.physion.ovation.domain.NumericDataElements;
     
     data_map = NumericDataElements.getDataMap(nm);
     
