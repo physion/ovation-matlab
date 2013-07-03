@@ -12,7 +12,7 @@ classdef MatlabTestCase < TestCase
     end
     
     methods
-        function self = TestMatlabSuite(name)
+        function self = MatlabTestCase(name)
             
             self = self@TestCase(name);
         end
@@ -25,8 +25,8 @@ classdef MatlabTestCase < TestCase
 
             try
                 self.databaseName = 'matlab_test-email-com';
-                self.userIdentity = 'matlab_test@email.com'
-                self.userPassword = 'matlab'
+                self.userIdentity = 'matlab_test@email.com';
+                self.userPassword = 'matlab';
 
                 self.localStack = TestUtils().makeLocalStack(OvationApiModule(), ...
                     self.databaseName, ...

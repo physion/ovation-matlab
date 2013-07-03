@@ -70,13 +70,6 @@ function m = struct2map_(s, m, prefix, opts)
         else
             if(ischar(value))
                 value = java.lang.String(value);
-            elseif((isnumeric(value) || islogical(value)) && numel(value) > 1)
-                if(isvector(value))
-                    value = NumericData(value);
-                else
-                    value = NumericData(reshape(value, 1, numel(value)),...
-                        size(value));
-                end
             elseif(isempty(value))
                 value = '<empty>';
             elseif(isa(value, 'function_handle'))
@@ -97,7 +90,7 @@ function m = struct2map_(s, m, prefix, opts)
             if(isempty(prefix))
                 key = keys{i};
             else
-                key = [prefix '__' keys{i}];
+                key = [prefix '.' keys{i}];
             end
             
             m.put(java.lang.String(key), value);
