@@ -4,12 +4,12 @@
 % Copyright (c) 2013 Physion Consulting LLC
 
 function m = nm2data(nm)
-    
-    import us.physion.ovation.NumericDataElements;
+    import ovation.*;
+    import us.physion.ovation.domain.NumericDataElements;
     
     data_map = NumericDataElements.getDataMap(nm);
     
-    keys = i2array(data_map.keySet());
+    keys = it2array(data_map.keySet());
     m = struct();
     
     for i = 1:length(keys)

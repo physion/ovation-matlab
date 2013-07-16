@@ -18,7 +18,7 @@ classdef TestStruct2Map < TestCase
 			
 			assert(s.key1 == m.get('key1'));
 			assert(strcmp(s.key2, char(m.get('key2'))));
-			assert(isequal(s.key3, m.get('key3').getFloatingPointData()'));
+			assert(isequal(s.key3, m.get('key3')));
         end
         
         function testConvertsStructToNestedLabel(~)
@@ -40,7 +40,7 @@ classdef TestStruct2Map < TestCase
            
            m = struct2map(s);
            
-           assert(isequal(s.key1, m.get('key1').getFloatingPointData()'));
+           assert(isequal(s.key1, m.get('key1')));
         end
         
         function testConvertsLogicalArrayToNumericData(~)
@@ -50,7 +50,7 @@ classdef TestStruct2Map < TestCase
             
             m = struct2map(s);
             
-            assert(isequal(int16(s.key1), int16(m.get('key1').getIntegerData()')));
+            assert(isequal(int16(s.key1), int16(m.get('key1'))));
         end
         
         function testConvertsFunctionHandleToFunctionName(~)

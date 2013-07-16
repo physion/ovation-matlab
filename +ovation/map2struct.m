@@ -55,8 +55,9 @@ function s = map2struct(map)
 		
 		mlKey = char(key);
 		
-		% Replace obviousl illegal field characters
+		% Replace obviously illegal field characters
 		mlKey(strfind(mlKey,'-')) = '_';
+        mlKey = strrep(mlKey, '.', '__');
 		
         fname = genvarname(mlKey);
         
