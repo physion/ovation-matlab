@@ -17,16 +17,6 @@ function s = array2set(arr)
 %   [3.0, 2.0, 1.0]
 
 % Copyright (c) 2012 Physion Consulting LLC
-
-
-	s = java.util.HashSet();
-	for i = 1:length(arr)
-		if(iscell(arr))
-			item = arr{i};
-		else
-			item = arr(i);
-		end
-
-		s.add(item);
-	end
+  import com.google.common.collect.*
+  s = Sets.newHashSet(arr)
 end
