@@ -16,7 +16,7 @@ classdef TestEpochGroupForInsertion < MatlabTestCase
 
             exp = p.insertExperiment('test', startDate);
 
-            src = context.insertSource('mylabel');
+            src = context.insertSource('mylabel', 'myidentifier');
 
             label1 = 'label1';
             label2 = 'label2';
@@ -24,15 +24,14 @@ classdef TestEpochGroupForInsertion < MatlabTestCase
             [group,~] = epochGroupForInsertion(exp, src, {label1,label2,label3}, startDate);
 
             assert(strcmp(label3, group.getLabel()));
-            assert(startDate.equals(group.getStartTime()));
-            assert(strcmp(src.getUuid(), group.getSource().getUuid()))
+            assert(startDate.equals(group.getStart()));
 
             assert(strcmp(label2, group.getParent().getLabel()))
             assert(strcmp(label1, group.getParent().getParent().getLabel()))
             assert(strcmp(exp.getUuid(), group.getExperiment().getUuid()));
 
 
-            children = group.getParent().getParent().getChildren();
+            children = asarray(group.getParent().getParent().getEpochGroups());
             child = children(1);
 
             [group,~] = epochGroupForInsertion(exp, src, {label1, child, label3}, startDate);

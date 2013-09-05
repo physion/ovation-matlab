@@ -16,8 +16,8 @@ classdef TestAsArray < TestCase
 			
 			arr = ovation.asarray(l);
 			
-			assertEquals(1, arr(1));
-			assertEquals(2, arr(2))
+			assert(1 == arr(1));
+			assert(2 == arr(2))
 		end
     end
 end

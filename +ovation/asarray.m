@@ -15,5 +15,8 @@ function arr = asarray(iterable)
 	%	'world!'
 
 
-	arr = ovation.it2array(iterable);
+    import com.google.common.collect.Lists;
+	
+	l = Lists.newArrayList(iterable);
+	arr = l.toArray();
 end
