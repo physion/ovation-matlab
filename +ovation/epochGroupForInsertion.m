@@ -31,17 +31,19 @@ end
 
 function [group,isNew] = insertLabeledGroup(parent, source, labels, startDate)
 	
+    import ovation.*
+    
 	assert(~isempty(labels));
 	
 	label = labels{1};
 	
 	if(isjava(label))
-		assert(strcmp('ovation.EpochGroup', char(label.getClass().getName())),...
+		assert(strcmp('us.physion.ovation.domain.concrete.EpochGroup', char(label.getClass().getName())),...
 			'Hierarchy element must be either a string label or an EpochGroup instance.');
 		group = label;
 		isNew = false;
 	else
-		group = parent.insertEpochGroup(source, label, startDate);
+		group = parent.insertEpochGroup(label, startDate, [], [], []);
 		isNew = true;
 	end
 	

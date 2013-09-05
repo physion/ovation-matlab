@@ -94,7 +94,13 @@ function [source,isNew] = sourceForInsertion(context,...
 end
 
 function src = insertSource(container, label, srcIDKey, srcID)
-	src = container.insertSource(label);
+    if isnumeric(srcID)
+        sourceIdentifier = num2str(srcID);
+    else
+        sourceIdentifier = srcID;
+    end
+    
+	src = container.insertSource(label, sourceIdentifier);
 	if(~isempty(srcIDKey) && ~isempty(srcID))
 		src.addProperty(srcIDKey, srcID);
 	end
@@ -102,20 +108,35 @@ end
 
 function [source,isNew] = insertLabeledSource(context, labels, sourceIDKeys, sourceIDs)
     
+    import ovation.*;
+    
     assert(~isempty(labels));
     
     source = [];
     
-    if(isjava(labels{1}) && strcmp('ovation.Source', char(labels{1}.getClass().getName())))
+    if(isjava(labels{1}) && strcmp('us.physion.ovation.domain.concrete.Source', char(labels{1}.getClass().getName())))
         source = labels{1};
         isNew = false;
     else
-        candidates = context.getSources(labels{1});
+        if(strcmp('us.physion.ovation.domain.concrete.Source', char(context.getClass().getName())))
+            children = asarray(context.getChildrenSources());
+            candidates = java.util.HashSet();
+            for i = 1:length(children)
+                if(children(i).getLabel().equals(labels{i}))
+                    candidates.add(children(i));
+                end
+            end
+            
+            candidates = candidates.toArray();
+        else
+            candidates = asarray(context.getSourcesWithLabel(labels{1}));
+        end
+        
         for i = 1:length(candidates)
             s = candidates(i);
             if(~isempty(sourceIDKeys{1}) && ~isempty(sourceIDs{1}))
-                if((~isnumeric(sourceIDs{1}) && sourceIDs{1}.equals(s.getOwnerProperty(sourceIDKeys{1}))) ||...
-                        (isnumeric(sourceIDs{1}) &&  sourceIDs{1} == s.getOwnerProperty(sourceIDKeys{1})))
+                if((~isnumeric(sourceIDs{1}) && sourceIDs{1}.equals(s.getUserProperty(s.getOwner(), sourceIDKeys{1}))) ||...
+                        (isnumeric(sourceIDs{1}) &&  sourceIDs{1} == s.getUserProperty(s.getOwner(), sourceIDKeys{1})))
                     source = s;
                     isNew = false;
                     break;

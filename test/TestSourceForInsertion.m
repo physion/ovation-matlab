@@ -4,87 +4,115 @@ classdef TestSourceForInsertion < MatlabTestCase
     
     methods
         function self = TestSourceForInsertion(name)
-             self = self@MatlabTestCase(name);
+            self = self@MatlabTestCase(name);
         end
         
         function testCreatesNewSource(self)
             context = self.context;
             import ovation.*;
             label = ['TestSourceForInsertionCreatesNewSource' num2str(rand)];
-
-            sLength = length(context.getSources(label));
-
+            
+            sLength = length(asarray(context.getSourcesWithLabel(label)));
+            
             [source,isNew] = sourceForInsertion(context, {label});
-
+            
             assert(isNew);
             assert(strcmp(label, source.getLabel));
-            assert(length(context.getSources(label)) == sLength + 1);
-
+            assert(length(asarray(context.getSourcesWithLabel(label))) == sLength + 1);
+            
             idKey = 'animal-ID';
             idValue = 'TestSourceForInsertionCreatesNewSource';
             [source,~] = sourceForInsertion(context, {label}, idKey, idValue);
-
-            assert(any(strcmp(source.getProperty(idKey), idValue)));
-
-
+            
+            assert(strcmp(source.getUserProperty(source.getOwner(), idKey), idValue));
+            
+            
         end
         
         function testCreatesExistingLabelledSource(self)
             context = self.context;
             import ovation.*;
             label = 'TestSourceForInsertionReturnsExistingSingleLabeledSource';
-
+            
             [expected,~] = sourceForInsertion(context, {label});
-
-
+            
+            
             [actual,isNew] = sourceForInsertion(context, {expected});
-
+            
             assert(~isNew);
             assert(strcmp(expected.getUuid, actual.getUuid));
-
+            
             idKey = 'animal-id';
             idValue = 'TestSourceForInsertionReturnsExistingSingleLabeledSource';
             actual.addProperty(idKey, idValue);
-
+            
             expected = actual;
             [actual,~] = sourceForInsertion(context, {expected}, idKey, idValue);
-
+            
             assert(strcmp(expected.getUuid, actual.getUuid));
-
+            
             [~,isNew] = sourceForInsertion(context, {label}, idKey, 'foo');
-
+            
             assert(isNew);
         end
         
         function testSelectsExistingNestedSources(self)
             context = self.context;
             import ovation.*;
-
+            
+            project = context.insertProject('unused', 'unused', datetime());
+            experiment = project.insertExperiment('unused', datetime());
+            protocol = context.insertProtocol('unused', 'unused');
+            
             label1 = 'p1';
             key1 = 'key1';
             id1 = 'id1';
-            p1 = context.insertSource(label1);
+            p1 = context.insertSource(label1, id1);
             p1.addProperty(key1, id1);
             
-            p1.insertSource('distractor');
+            p1.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                'distractor', 'distractor');
             
             label2 = 'p2';
             key2 = 'key2';
             id2 = 'id2';
-            p2 = p1.insertSource(label2);
+            p2 = p1.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                label2, id2);
             p2.addProperty(key2, id2);
             
-            p2.insertSource('distractor');
+            p2.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                'distractor', 'distractor');
             
             label3 = 'p3';
             key3 = 'key2';
             id3 = 'id2';
-            p3 = p2.insertSource(label3);
+            p3 = p2.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                label3, id3);
             p3.addProperty(key3, id3);
             
             key4 = 'key4';
             id4 = 'id4';
-
+            
             expectedLabel = 'testSelectsExistingNestedSources';
             [actual,isNew] = sourceForInsertion(context,...
                 {label1,label2,label3,expectedLabel},...
@@ -144,7 +172,7 @@ classdef TestSourceForInsertion < MatlabTestCase
         end
         
         function testShouldFindSourceInDistractors(self)
-           
+            import ovation.*
             ctx = self.context;
             
             label = 'type_label';
@@ -153,19 +181,43 @@ classdef TestSourceForInsertion < MatlabTestCase
             idvalue = 'abc';
             distractorValue = '123';
             
-            src = ctx.insertSource(label);
+            project = ctx.insertProject('unused', 'unused', datetime());
+            experiment = project.insertExperiment('unused', datetime());
+            protocol = ctx.insertProtocol('unused', 'unused');
+            
+            src = ctx.insertSource(label, idvalue);
             src.addProperty(idkey, idvalue);
-            c = src.insertSource(label2);
+            
+            c = src.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                label2, idvalue);
+            
             c.addProperty(idkey, idvalue);
             
-            d = ctx.insertSource(label);
+            d = ctx.insertSource(label, distractorValue);
             d.addProperty(idkey, distractorValue);
-            c = d.insertSource(label2);
+            c = d.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                label2, distractorValue);
             c.addProperty(idkey, distractorValue);
-
-            d = ctx.insertSource(label);
+            
+            d = ctx.insertSource(label, distractorValue);
             d.addProperty(idkey, distractorValue);
-            c = d.insertSource(label2);
+            c = d.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                label2, distractorValue);
             c.addProperty(idkey, distractorValue);
             
             
@@ -185,7 +237,7 @@ classdef TestSourceForInsertion < MatlabTestCase
             idkey = 'id-key';
             idvalue = 123;
             
-            src = ctx.insertSource(label);
+            src = ctx.insertSource(label, num2str(idvalue));
             src.addProperty(idkey, idvalue);
             
             [~,isnew] = ovation.sourceForInsertion(ctx,...
@@ -197,14 +249,25 @@ classdef TestSourceForInsertion < MatlabTestCase
         end
         
         function testShouldUseSourceInstancesInPathWithExistingChild(self)
-           
+            import ovation.*
+            
             ctx = self.context;
             label = 'my-label';
             idkey = 'my-id-key';
             idvalue = 'my-id-value';
             
-            s = ctx.insertSource('unused');
-            c = s.insertSource(label);
+            project = ctx.insertProject('unused', 'unused', datetime());
+            experiment = project.insertExperiment('unused', datetime());
+            protocol = ctx.insertProtocol('unused', 'unused');
+            
+            s = ctx.insertSource('unused', idvalue);
+            c = s.insertSource(experiment,...
+                datetime(),...
+                datetime(),...
+                protocol,...
+                struct2map(struct()),...
+                com.google.common.base.Optional.absent(),...
+                label, idvalue);
             c.addProperty(idkey, idvalue);
             
             [result,isnew] = ovation.sourceForInsertion(ctx,...
@@ -223,7 +286,7 @@ classdef TestSourceForInsertion < MatlabTestCase
             idkey = 'my-id-key';
             idvalue = 'my-id-value';
             
-            s = ctx.insertSource('unused');
+            s = ctx.insertSource('unused', 'unused');
             
             
             [result,isnew] = ovation.sourceForInsertion(ctx,...

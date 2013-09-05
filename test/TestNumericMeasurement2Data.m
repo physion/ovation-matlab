@@ -14,7 +14,7 @@ classdef TestNumericMeasurement2Data < MatlabTestCase
             data1 = [1,2,3];
             data2 = [3,4,5];
             
-            nd = NumericData();
+            nd = us.physion.ovation.values.NumericData();
             nd.addData('data1', data1, 'units', 1, 'Hz');
             nd.addData('data 2', data2, 'units', 1, 'Hz');
             

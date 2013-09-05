@@ -14,9 +14,8 @@ function arr = it2array(iterable)
     % 	'hello'
 	%	'world!'
 
-	
-	import com.google.common.collect.Lists;
-	
-	l = Lists.newArrayList(iterable);
-	arr = l.toArray();
+	warning('ovation:deprecation',...
+        'it2array is deprecated. Please use asarray instead');
+    
+	arr = ovation.it2array(iterable);
 end
