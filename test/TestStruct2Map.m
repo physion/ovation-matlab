@@ -79,5 +79,23 @@ classdef TestStruct2Map < TestCase
             m = struct2map(s);
             assert(strcmp('abcdefghi', char(m.get('key1'))));
         end
+        
+        function testMapsNestedRecordArrays(~)
+            import ovation.*;
+            
+            s.key1 = 'value1';
+            s.arr(1).foo = 1;
+            s.arr(1).bar = 'abc';
+            s.arr(2).foo = 2;
+            s.arr(2).bar = 'def';
+            
+            m = struct2map(s);
+            
+            assertEqual(s.arr(1).foo, m.get('arr(1).foo'));
+            assertEqual(s.arr(2).foo, m.get('arr(2).foo'));
+            
+            assert(strcmp('abc', char(m.get('arr(1).bar'))));
+            assert(strcmp('def', char(m.get('arr(2).bar'))));
+        end
     end
 end

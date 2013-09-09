@@ -37,5 +37,27 @@ classdef TestMap2Struct < TestCase
             assertEqual(s.b, a.b);
             assertEqual(s.c.d, a.c.d);
         end
+        
+        function testShouldConvertNestedStructArrays(~)
+            import ovation.*;
+            
+            s.key1 = 'value1';
+            s.arr(1).foo = 1;
+            s.arr(1).bar = 'abc';
+            s.arr(2).foo = 2;
+            s.arr(2).bar = 'def';
+            
+            m = struct2map(s);
+            
+            actual = map2struct(m);
+            
+            assertEqual(s.arr(1).foo, actual.arr(1).foo);
+            assertEqual(s.arr(2).foo, actual.arr(2).foo);
+            
+            assertEqual(s.arr(1).bar, actual.arr(1).bar);
+            assertEqual(s.arr(2).bar, actual.arr(2).bar);
+            
+            assertEqual(s.key1, actual.key1);
+        end
     end
 end

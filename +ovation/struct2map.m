@@ -61,12 +61,22 @@ function m = struct2map_(s, m, prefix, opts)
     for i=1:length(keys)
         value = s.(keys{i});
         if(isstruct(value))
-            if(~isempty(prefix))
-                newPrefix = [prefix '__' keys{i}];
-            else
-                newPrefix = keys{i};
+            for j = 1:length(value)
+                v = value(j);
+                if(length(value) > 1)
+                    elementSuffix = ['(' num2str(j) ')'];
+                else
+                    elementSuffix = '';
+                end
+                
+                if(~isempty(prefix))
+                    newPrefix = [prefix '.' keys{i} elementSuffix];
+                else
+                    newPrefix = [keys{i} elementSuffix];
+                end
+                
+                m = struct2map_(v, m, newPrefix);
             end
-            m = struct2map_(value, m, newPrefix);
         else
             if(ischar(value))
                 value = java.lang.String(value);

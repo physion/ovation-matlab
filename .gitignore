@@ -7,3 +7,4 @@
 
 # OS X
 .DS_Store
+*.m~
