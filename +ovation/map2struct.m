@@ -57,16 +57,9 @@ function s = map2struct(map)
 		
 		% Replace obviously illegal field characters
 		mlKey(strfind(mlKey,'-')) = '_';
-        mlKey = strrep(mlKey, '.', '__');
 
-        fname = mlKey;
-%         fname = genvarname(mlKey);
-        
-        % struct2map represents nested structs with __.
-        % Substitute __ => ., so that eval() will reconstitute
-        % the nested struct.
-        fname = strrep(fname, '__', '.');
-        
+        fname = mlKey; %genvarname(mlKey)
+
         % Strip trailing .
         if(fname(end) == '.')
             fname = fname(1:end-1);
