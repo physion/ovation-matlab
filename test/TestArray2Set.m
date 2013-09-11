@@ -43,5 +43,12 @@ classdef TestArray2Set < TestCase
             end
         end
         
+        function testConvertsEmptyArrayToEmptySet(~)
+            v = [];
+            s = ovation.array2set(v);
+            
+            assertEqual(0, s.size());
+        end
+        
     end
 end

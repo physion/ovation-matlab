@@ -34,12 +34,16 @@
 
 function s = array2set(arr)
 
-  import com.google.common.collect.*;
-  
-  if(~iscell(arr))
-      error('ovation:array2set:unsupported_value',...
-          'array2set argument must be an object (cell) array');
-  end
-  
-  s = Sets.newHashSet(arr);
+    import com.google.common.collect.*;
+    
+    if(isempty(arr))
+        s = Sets.newHashSet();
+    else
+        if(~iscell(arr))
+            error('ovation:array2set:unsupported_value',...
+                'array2set argument must be an object (cell) array');
+        end
+        
+        s = Sets.newHashSet(arr);
+    end
 end
