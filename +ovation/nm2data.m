@@ -9,7 +9,7 @@ function m = nm2data(nm)
     
     data_map = NumericDataElements.getDataMap(nm);
     
-    keys = it2array(data_map.keySet());
+    keys = asarray(data_map.keySet());
     m = struct();
     
     for i = 1:length(keys)

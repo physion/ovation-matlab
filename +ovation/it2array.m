@@ -17,5 +17,5 @@ function arr = it2array(iterable)
 	warning('ovation:deprecation',...
         'it2array is deprecated. Please use asarray instead');
     
-	arr = ovation.it2array(iterable);
+	arr = ovation.asarray(iterable);
 end
