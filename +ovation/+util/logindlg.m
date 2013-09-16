@@ -110,9 +110,9 @@ Color = get(0,'DefaultUicontrolBackgroundcolor');
 
 % Determine the size and position of the login interface
 if Pass == 0
-    Height = 9.5;
+    Height = 10;
 else
-    Height = 5.5;
+    Height = 6;
 end
 set(0,'Units','characters')
 Screen = get(0,'screensize');
@@ -138,15 +138,15 @@ end
 
 % Texts
 if Pass == 0
-    gui.login_text = uicontrol(gui.main,'Style','text','FontSize',8,'HorizontalAlign','left','Units','characters','String','Login','Position',[1 7.65 20 1]);
+    gui.login_text = uicontrol(gui.main,'Style','text','FontSize',12,'HorizontalAlign','left','Units','characters','String','Login','Position',[1 7.75 20 1.5]);
 end
-gui.password_text = uicontrol(gui.main,'Style','text','FontSize',8,'HorizontalAlign','left','Units','characters','String','Password','Position',[1 4.15 20 1]);
+gui.password_text = uicontrol(gui.main,'Style','text','FontSize',12,'HorizontalAlign','left','Units','characters','String','Password','Position',[1 4.15 20 1.5]);
 
 % Edits
 if Pass == 0
-    gui.edit1 = uicontrol(gui.main,'Style','edit','FontSize',8,'HorizontalAlign','left','BackgroundColor','white','Units','characters','String','','Position',[1 6.02 33 1.7],'KeyPressfcn',{@Escape});
+    gui.edit1 = uicontrol(gui.main,'Style','edit','FontSize',12,'HorizontalAlign','left','BackgroundColor','white','Units','characters','String','','Position',[1 6.02 33 2],'KeyPressfcn',{@Escape});
 end
-gui.edit2 = uicontrol(gui.main,'Style','edit','FontSize',8,'HorizontalAlign','left','BackgroundColor','white','Units','characters','String','','Position',[1 2.52 33 1.7],'KeyPressfcn',{@KeyPress_Function,gui.main},'Userdata','');
+gui.edit2 = uicontrol(gui.main,'Style','edit','FontSize',12,'HorizontalAlign','left','BackgroundColor','white','Units','characters','String','','Position',[1 2.52 33 2],'KeyPressfcn',{@KeyPress_Function,gui.main},'Userdata','');
 
 % Buttons
 gui.OK = uicontrol(gui.main,'Style','push','FontSize',8,'Units','characters','String','OK','Position',[12 .2 10 1.7],'Callback',{@OK,gui.main},'KeyPressfcn',{@Escape});
