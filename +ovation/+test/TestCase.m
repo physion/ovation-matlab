@@ -69,8 +69,7 @@ classdef TestCase < matlab.unittest.TestCase
                 end
             end
             
-            addpath .; %test dir
-            addpath ..; %+ovation
+            self.localFixture();
         end
         
         function tearDownLocalStack(self)
@@ -80,6 +79,10 @@ classdef TestCase < matlab.unittest.TestCase
                 assert(false, ex.message);
             end
            
+        end
+        
+        function localFixture(self) %#ok<MANU>
+           % Executed after building local stack 
         end
     end
  
