@@ -1,13 +1,4 @@
-classdef ClassFixtureTestCase < matlab.unittest.TestCase
- 
-    properties
-        context
-        localStack
-        databaseName
-        userIdentity
-        userPassword
-        dsc
-    end
+classdef ClassFixtureTestCase < ovation.test.TestCase
  
     methods(TestClassSetup)
         function setUpLocalStack(testCase)
