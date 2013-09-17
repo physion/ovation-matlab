@@ -5,9 +5,8 @@
 
 function m = nm2data(nm)
     import ovation.*;
-    import us.physion.ovation.domain.NumericDataElements;
     
-    data_map = NumericDataElements.getDataMap(nm);
+    data_map = asnumeric(nm);
     
     keys = asarray(data_map.keySet());
     m = struct();
