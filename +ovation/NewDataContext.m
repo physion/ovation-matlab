@@ -12,8 +12,18 @@ function context = NewDataContext(userEmail, password)
 % Copyright (c) 2012 Physion Consulting LLC
 
     import ovation.util.*;
+    import java.lang.Thread;
     
     narginchk(0,2);
+    
+    
+    classLoader = ovation_classloader(fullfile(fileparts(which(mfilename('fullpath'))), 'ovation.jar'));
+    ovationClass = classLoader.loadClass('us.physion.ovation.api.Ovation');
+    strClass = classLoader.loadClass('java.lang.String');
+    connectMethod = ovationClass.getMethod('connect', [strClass, strClass]);
+    
+    currentThread = Thread.currentThread();
+    currentThread.setContextClassLoader(ovationClass.getClassLoader());
     
     if(nargin == 0)
         [userEmail, password] = logindlg('Title', 'ovation.io');
@@ -32,7 +42,12 @@ function context = NewDataContext(userEmail, password)
 	import us.physion.ovation.api.*
     
     disp('Authenticating...');
-    dsc = Ovation.connect(userEmail, password);
+    
+    args = javaArray('java.lang.String', 2);
+    args(1) = java.lang.String(userEmail);
+    args(2) = java.lang.String(password);
+    
+    dsc = connectMethod.invoke([], args);
     
     context = dsc.getContext();
 end
