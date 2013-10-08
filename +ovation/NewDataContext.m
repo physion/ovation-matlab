@@ -21,6 +21,7 @@ function context = NewDataContext(userEmail, password)
     ovationClass = classLoader.loadClass('us.physion.ovation.api.Ovation');
     strClass = classLoader.loadClass('java.lang.String');
     connectMethod = ovationClass.getMethod('connect', [strClass, strClass]);
+    versionMethod = ovationClass.getMethod('getVersion', []);
     
     currentThread = Thread.currentThread();
     currentThread.setContextClassLoader(ovationClass.getClassLoader());
@@ -40,6 +41,8 @@ function context = NewDataContext(userEmail, password)
     end
     
 	import us.physion.ovation.api.*
+    
+    disp(['Ovation Matlab Core API version ' char(versionMethod.invoke([], []))]);
     
     disp('Authenticating...');
     
