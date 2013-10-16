@@ -1,6 +1,6 @@
 %% Connect to the Ovation database
 
-ctx = NewDataContext();
+context = NewDataContext();
 
 %% Create a project
 import ovation.*
@@ -11,7 +11,7 @@ projectPurpose = 'Learning Ovation';
 % You can use datetime() to make a timestamp at the current instant, or you
 % can provide year,month,day,etc. as arguments to create a timestamp in the
 % past (or future). 
-project = ctx.insertProject(projectName, projectPurpose, datetime());
+project = context.insertProject(projectName, projectPurpose, datetime());
 
 
 %% Add/find a Source
@@ -23,9 +23,9 @@ source_id = 'mouse-id-number'; % e.g. the mouse's ID in the facility database
 % Ovation methods that return more than one item return an Iterator that
 % can iterate through the (maybe very large) result set. If you want a
 % Matlab array, use the asarray function.
-sources = asarray(ctx.getSources(label, source_id));
+sources = asarray(context.getSources(label, source_id));
 if(isempty(sources))
-    source = ctx.insertSource(label, source_id);
+    source = context.insertSource(label, source_id);
     % Add source properties
     source.addProperty('sex', 'F');
     % etc.
@@ -78,13 +78,13 @@ group = experiment.insertEpochGroup(groupLabel,...
 %% Define the Protocol for trials
 
 protocolName = 'Experiment Demo Protocol';
-protocol = ctx.getProtocol(protocolName);
+protocol = context.getProtocol(protocolName);
 
 if(isempty(protocol))
     % The Protocol document would describe the protocol in detail,
     % including protocol "variables" called protocol parameters, which we
     % denote by convention as {VARIABLE_NAME} within the protocol document.
-    protocol = ctx.insertProtocol(protocolName, '...Protocol Document...');
+    protocol = context.insertProtocol(protocolName, '...Protocol Document...');
 end
 
 %% Insert an Epoch
@@ -104,19 +104,19 @@ epoch = group.insertEpoch(datetime(),... % Start
 
 %% Add a numeric measurement
 
-% Assign the monkey Source to this Epoch with a local name of "subject"
+% Assign the mouse Source to this Epoch with a local name of "subject"
 epoch.addInputSource('subject', source);
 
 samplingRateHz = 10000;
 
 data = us.physion.ovation.values.NumericData();
 data.addData('channel_1',...
-        random(1,1000),... % real data would go here!
-        'units',... % units of measure
-        samplingRateHz,... % sampling rate
-        'Hz'); % sampling rate units
+    randn(1,1000),... % real data would go here!
+    'units',... % units of measure
+    samplingRateHz,... % sampling rate
+    'Hz'); % sampling rate units
 data.addData('channel_2',...
-    random(1,1000),... % real data would go here!
+    rand(1,1000),... % real data would go here!
     'units',... % units of measure
     samplingRateHz,... % sampling rate
     'Hz'); % sampling rate units
@@ -127,19 +127,31 @@ epoch.insertNumericMeasurement('measurement-name',...
     data);
     
 
+%% Wait for all file uploads to complete
+context.getFileService().waitForPendingUploads(10, java.util.concurrent.TimeUnit.SECONDS);
+
 %% Get the measurement data for channel 2
+
+context.getRepository().clear(); % Known bug; Measurement is not refreshed correctly
 
 measurement = epoch.getMeasurement('measurement-name');
 
 % Get info about the numeric measurement
 numericMeasurement = asnumeric(measurement);
-units = numericMeasurement.get('channel 2').units;
 srate = numericMeasurement.get('channel 2').samplingRates;
 
 % Get the numeric data as a struct
 data = nm2data(measurement);
 time = (1:length(data.channel_2)) / srate;
-plot(time, data.channel_2);
-ylabel([char(measurement.getName()) ' (' char(units) ')']);
+
+subplot(2,1,1);
+plot(time, data.channel_1);
+ylabel([char(measurement.getName()) ' (' char(numericMeasurement.get('channel 1').units) ')']);
 xlabel('Time (s)');
+title('Channel 1');
+subplot(2,1,2);
+plot(time, data.channel_2);
+ylabel([char(measurement.getName()) ' (' char(numericMeasurement.get('channel 1').units) ')']);
+xlabel('Time (s)');
+title('Channel 2');
 
