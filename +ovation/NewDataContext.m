@@ -86,6 +86,11 @@ function context = NewDataContext(userEmail, password)
         end
     end
     
+    
+    if(~exist(jarPath, 'file'))
+        error('Ovation Matlab Core API JAR is not available. You must be online to automatically download the required JAR.'); %TODO a better error message.
+    end
+    
     if(~check_classpath(jarPath))
         firstrun_classpath(jarPath);
         context = [];
@@ -96,10 +101,6 @@ function context = NewDataContext(userEmail, password)
         disp('Please restart Matlab before using the Ovation API.');
         context = [];
         return;
-    end
-    
-    if(~exist(jarPath, 'file'))
-        error('Ovation Matlab Core API JAR is not available'); %TODO a better error message.
     end
     
     
