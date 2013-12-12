@@ -75,6 +75,9 @@ function context = NewDataContext(userEmail, password)
                disp('Downloading Ovation Core API...');
                urlwrite(download_info.url, jarPath);
                
+               fid = fopen(etagPath, 'w');
+               fprintf(fid, download_info.etag);
+               fclose(fid);
            end
         end
     end
