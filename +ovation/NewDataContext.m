@@ -16,6 +16,26 @@ function context = NewDataContext(userEmail, password)
     
     narginchk(0,2);
     
+    jarName = 'ovation.jar';
+    jarEtag = 'ovation.jar.etag';
+    homeFolder = char(java.lang.System.getProperty('user.home'));
+    if(ismac())
+        jarFolder = fullfile(homeFolder, 'Library', 'Application Support', 'us.physion.ovation', 'matlab');
+    elseif(ispc())
+        jarFolder = fullfile(homeFolder, 'AppData', 'Local', 'ovation', 'matlab');
+    elseif(isunix())
+        jarFolder = fullfile(homeFolder, '.ovation', 'matlab');
+    else
+        error(['Unsupported platform: ' computer()]);
+    end
+    
+    if(~exist(jarFolder, 'dir'))
+        mkdir(jarFolder);
+    end
+    
+    jarPath = fullfile(jarFolder, jarName);
+    etagPath = fullfile(jarFolder, jarEtag);
+    
     if(nargin == 0)
         [userEmail, password] = logindlg('Title', 'ovation.io');
         if(isempty(userEmail) || isempty(password))
@@ -29,26 +49,7 @@ function context = NewDataContext(userEmail, password)
             return
         end
     end
-    
-    jarName = 'ovation.jar';
-    jarEtag = 'ovation.jar.etag';
-    homeFolder = char(java.lang.System.getProperty('user.home'));
-    if(ismac())
-        jarFolder = fullfile(homeFolder, 'Library', 'Application Support', 'us.physion.ovation', 'matlab');
-    elseif(ispc())
-        jarFolder = fullfile(homeFolder, 'AppData', 'Local', 'ovation', 'matlab');
-    elseif(isunix())
-        jarFolder = fullfile(homeFolder, '.ovation', 'matlab');
-    else
-        error('Unsupported platform');
-    end
-    
-    if(~exist(jarFolder, 'dir'))
-        mkdir(jarFolder);
-    end
-    
-    jarPath = fullfile(jarFolder, jarName);
-    etagPath = fullfile(jarFolder, jarEtag);
+   
     
     [r,status] = urlread('https://ovation.io/api/v1/sessions', ...
         'POST', {'email', userEmail, 'password', password});
@@ -82,36 +83,44 @@ function context = NewDataContext(userEmail, password)
         end
     end
     
+    if(~check_classpath(jarPath))
+        firstrun_classpath(jarPath);
+        context = [];
+        return
+    end
     
     if(~exist(jarPath, 'file'))
         error('Ovation Matlab Core API JAR is not available'); %TODO a better error message.
     end
     
+    
     disp('Loading Ovation libraries...');
     
-    classLoader = ovation_classloader(fullfile(fileparts(which(mfilename('fullpath'))), 'ovation.jar'));
-    
-    currentThread = Thread.currentThread();
-    currentThread.setContextClassLoader(classLoader);
-    
-    ovationClass = classLoader.loadClass('us.physion.ovation.api.Ovation');
-    strClass = classLoader.loadClass('java.lang.String');
-    connectMethod = ovationClass.getMethod('connect', [strClass, strClass]);
-    versionMethod = ovationClass.getMethod('getVersion', []);
+    import us.physion.ovation.api.*;
     
     
+%     classLoader = ovation_classloader(jarPath);
+%     
+%     currentThread = Thread.currentThread();
+%     currentThread.setContextClassLoader(classLoader);
+%     
+%     ovationClass = classLoader.loadClass('us.physion.ovation.api.Ovation');
+%     strClass = classLoader.loadClass('java.lang.String');
+%     connectMethod = ovationClass.getMethod('connect', [strClass, strClass]);
+%     versionMethod = ovationClass.getMethod('getVersion', []);
     
-	import us.physion.ovation.api.*
+    versionString = Ovation.getVersion(); %versionMethod.invoke([], [])
     
-    disp(['Ovation Matlab Core API version ' char(versionMethod.invoke([], []))]);
+    disp(['Ovation Matlab Core API version ' char(versionString)]);
     disp(' ');
     disp('Authenticating...');
     
-    args = javaArray('java.lang.String', 2);
-    args(1) = java.lang.String(userEmail);
-    args(2) = java.lang.String(password);
+%     args = javaArray('java.lang.String', 2);
+%     args(1) = java.lang.String(userEmail);
+%     args(2) = java.lang.String(password);
+%     
+%     dsc = connectMethod.invoke([], args);
     
-    dsc = connectMethod.invoke([], args);
-    
+    dsc = Ovation.connect(userEmail, password);
     context = dsc.getContext();
 end
