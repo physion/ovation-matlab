@@ -54,6 +54,7 @@ function context = NewDataContext(userEmail, password)
     [r,status] = urlread('https://ovation.io/api/v1/sessions', ...
         'POST', {'email', userEmail, 'password', password});
     
+    restartRequired = false;
     if(status)
         r = ovation.util.parse_json(r);
         session = r{1};
@@ -79,6 +80,8 @@ function context = NewDataContext(userEmail, password)
                fid = fopen(etagPath, 'w');
                fprintf(fid, download_info.etag);
                fclose(fid);
+               
+               restartRequired = true;
            end
         end
     end
@@ -87,6 +90,12 @@ function context = NewDataContext(userEmail, password)
         firstrun_classpath(jarPath);
         context = [];
         return
+    end
+    
+    if(restartRequired)
+        disp('Please restart Matlab before using the Ovation API.');
+        context = [];
+        return;
     end
     
     if(~exist(jarPath, 'file'))
