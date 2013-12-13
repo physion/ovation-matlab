@@ -7,7 +7,7 @@ The Ovation Matlab API wraps the Ovation Java API for use by Matlab. Through thi
 
 ## Requirements
 
-* Matlab 2012b or later
+* Matlab 2013a or later
 
 
 ## Installation
