@@ -4,7 +4,7 @@ classdef TestTabularMeasurement < MatlabTestCase
     
     methods
         
-        function self = TestNumericMeasurement2Data(name)
+        function self = TestTabularMeasurement(name)
             self = self@MatlabTestCase(name);
         end
         

@@ -17,7 +17,7 @@ function [s,info] = urlread_auth(javaUrl, user, password)
     encoder = sun.misc.BASE64Encoder();
     authString = [user ':' password];
     auth = char(encoder.encode(java.lang.String(authString).getBytes()));
-    conn.setRequestProperty('Authorization', ['Basic ' auth]);\
+    conn.setRequestProperty('Authorization', ['Basic ' auth]);
     
     conn.connect();
     
