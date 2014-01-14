@@ -60,7 +60,7 @@ function m = struct2map_(s, m, prefix, opts)
     
     for i=1:length(keys)
         value = s.(keys{i});
-        if(isstruct(value))
+        if(isstruct(value)) || isobject(value)
             for j = 1:length(value)
                 v = value(j);
                 if(length(value) > 1)
