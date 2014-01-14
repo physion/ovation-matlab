@@ -97,5 +97,17 @@ classdef TestStruct2Map < TestCase
             assert(strcmp('abc', char(m.get('arr(1).bar'))));
             assert(strcmp('def', char(m.get('arr(2).bar'))));
         end
+        
+        function testMatlabObjects(~)
+            import ovation.*;
+            obj = DocPolynomSimpleTestObject([1 0 -2 -5]);
+            s.obj = obj;
+            
+            m = struct2map(s);
+            
+            assertEqual(s.obj.coef', m.get('obj.coef'));
+        end
+        
+        
     end
 end
