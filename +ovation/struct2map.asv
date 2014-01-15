@@ -60,7 +60,10 @@ function m = struct2map_(s, m, prefix, opts)
     
     for i=1:length(keys)
         value = s.(keys{i});
-        if(isstruct(value))
+        if(isstruct(value)) || isobject(value)
+            if length(value) == 1 && sum(strcmp(methods(value),'subsref'))
+                
+            end
             for j = 1:length(value)
                 v = value(j);
                 if(length(value) > 1)
@@ -77,17 +80,6 @@ function m = struct2map_(s, m, prefix, opts)
                 
                 m = struct2map_(v, m, newPrefix);
             end
-        elseif isobject(value) && length(value) == 1 
-            % && sum(strcmp(methods(value),'subsref')) % call if object has
-            % a subsref method
-            v = value;            
-            if(~isempty(prefix))
-                newPrefix = [prefix '.' keys{i}];
-            else
-                newPrefix = [keys{i}];
-            end
-            
-            m = struct2map_(v, m, newPrefix);
         else
             if(ischar(value))
                 value = java.lang.String(value);
