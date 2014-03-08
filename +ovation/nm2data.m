@@ -1,5 +1,5 @@
-% Converts an Ovation NumericMeasurement to a struct of vector/matrix
-% entries by data element name.
+% Converts an Ovation numeric Measurement or analysis output to a struct 
+% of vector/matrix entries by data element name.
 
 % Copyright (c) 2013 Physion Consulting LLC
 

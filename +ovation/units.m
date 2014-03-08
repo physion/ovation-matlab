@@ -14,11 +14,11 @@ function u = units(m)
 data_map = NumericDataElements.getDataMap(m);
 if (data_map.keySet().size() == 1)
   key = data_map.keySet().iterator().next();
-  u = data_map.get(key).units
+  u = data_map.get(key).units;
  else
-   keys = asarray(data_map.keySet())
-   u = []
-  for (i=1:keys.size())
+   keys = asarray(data_map.keySet());
+   u = [];
+  for i=1:keys.size()
     u.append(data_map.get(keys(i)).units)
   end
 end
