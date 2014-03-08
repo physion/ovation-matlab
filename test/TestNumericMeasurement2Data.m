@@ -25,8 +25,8 @@ classdef TestNumericMeasurement2Data < MatlabTestCase
             
             actual = nm2data(nm);
             
-            assert(all(actual.data1 == data1));
-            assert(all(actual.data_2 == data2));
+            assert(all(actual.data1' == data1));
+            assert(all(actual.data_2' == data2));
         end
     end
 end
