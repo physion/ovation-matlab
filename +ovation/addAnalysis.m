@@ -65,7 +65,7 @@ function ar = addAnalysis(entity,...
             n = fnames{i};
             ar.addOutput(n,...                                 % display name for this output
                 URL(['file://' outputs.(n)]),...               % path to file containing the output "data"
-                ovation.util.content_type(output.(n))...       % guess output content type
+                ovation.util.content_type(outputs.(n))...       % guess output content type
         );
     end
 
