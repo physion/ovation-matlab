@@ -16,7 +16,7 @@ classdef TestAnalysisRecordInsertion < MatlabTestCase
             nd.addData('data1', data1, 'units', 1, 'Hz');
             
             proj = self.context.insertProject('test', 'test', ovation.datetime());
-            ar1 = proj.addAnalysisRecord('record', array2set([]), protocol, struct2map(struct()));
+            ar1 = proj.addAnalysisRecord('record', array2set([]), [], struct2map(struct()));
             nm = ar1.addNumericOutput('data', nd);
             
             fname = tempname;
