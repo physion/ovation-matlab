@@ -63,9 +63,9 @@ function ar = addAnalysis(entity,...
     fnames = fieldnames(outputs);
     for i = 1:length(fnames)
             n = fnames{i};
-            ar.addOutput(n,...                      % display name for this output
-                URL(['file://' outputs.(n)]),...    % path to file containing the output "data"
-                'application/octet-stream'...       % output content type (this is a generic binary file)
+            ar.addOutput(n,...                                 % display name for this output
+                URL(['file://' outputs.(n)]),...               % path to file containing the output "data"
+                ovation.util.content_type(output.(n))...       % guess output content type
         );
     end
 
