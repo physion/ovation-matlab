@@ -59,5 +59,65 @@ classdef TestMap2Struct < TestCase
             
             assertEqual(s.key1, actual.key1);
         end
+        
+        function testShouldConvertArrayOfDOubles(~)
+           
+            s.list = java.util.ArrayList();
+            s.list.add(1);
+            s.list.add(2);
+            
+            m = ovation.struct2map(s);
+            
+            actual = ovation.map2struct(m);
+            
+            assertElementsAlmostEqual([1,2], actual.list, 'absolute', 1e-5);
+        end
+        
+        function testShouldConvertMatrixOfDOubles(~)
+           
+            s.list = java.util.ArrayList();
+            
+            r = java.util.ArrayList();
+            r.add(1);
+            r.add(2);
+            
+            s.list.add(r);
+            
+            r = java.util.ArrayList();
+            r.add(3);
+            r.add(4);
+            
+            s.list.add(r);
+            
+            
+            m = ovation.struct2map(s);
+            
+            actual = ovation.map2struct(m);
+            
+            assertElementsAlmostEqual([1,2;3,4], actual.list, 'absolute', 1e-5);
+        end
+        
+        function testShouldPassStringArrays(~)
+            s.list = java.util.ArrayList();
+            
+            r = java.util.ArrayList();
+            r.add('abc');
+            r.add('def');
+            
+            s.list.add(r);
+            
+            r = java.util.ArrayList();
+            r.add('ghi');
+            r.add('jkl');
+            
+            s.list.add(r);
+            
+            
+            m = ovation.struct2map(s);
+            
+            actual = ovation.map2struct(m);
+            
+            assertElementsAlmostEqual({{'abc'},{'def'};{'ghi'},{'jkl'}}, actual.list);
+        end
     end
 end
