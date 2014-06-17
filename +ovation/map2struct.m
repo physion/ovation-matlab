@@ -47,7 +47,9 @@ function s = map2struct(map)
 	while(itr.hasNext())
 		mapEntry = itr.next();
 		key = mapEntry.getKey();
-		value = mapEntry.getValue();
+		value = convertValue(mapEntry.getValue());
+        
+        
 		
 		if(length(value) == 1 && ~ischar(value))
 			value = value(1);
@@ -72,4 +74,38 @@ function s = map2struct(map)
             eval(['s.' fname '= value;']);
         end
 	end
+end
+
+function value = convertValue(value)
+    if(isjava(value))
+        List = ovation.javaClass('java.util.List');
+        String = ovation.javaClass('java.lang.String');
+        
+        if(String.isAssignableFrom(value.getClass()))
+            value = char(value);
+        elseif(List.isAssignableFrom(value.getClass()))
+            m = value.toArray().cell;
+            if(any(cellfun(@isjava, m)))
+                for i = 1:length(m)
+                    if(isjava(m{i}))
+                        m{i} = convertValue(m{i});
+                    end
+                end
+                
+                if(any(cellfun(@iscell, m)))
+                    value = m;
+                else
+                    value = cell2mat(m);
+                end
+            else
+                if(iscellstr(m))
+                    value = m';
+                else
+                    value = cell2mat(m');
+                end
+            end
+            
+            
+        end
+    end
 end
