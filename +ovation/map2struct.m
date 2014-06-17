@@ -92,9 +92,17 @@ function value = convertValue(value)
                     end
                 end
                 
-                value = cell2mat(m);
+                if(any(cellfun(@iscell, m)))
+                    value = m;
+                else
+                    value = cell2mat(m);
+                end
             else
-                value = cell2mat(m');
+                if(iscellstr(m))
+                    value = m';
+                else
+                    value = cell2mat(m');
+                end
             end
             
             

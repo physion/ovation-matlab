@@ -117,7 +117,16 @@ classdef TestMap2Struct < TestCase
             
             actual = ovation.map2struct(m);
             
-            assertElementsAlmostEqual({{'abc'},{'def'};{'ghi'},{'jkl'}}, actual.list);
+            assertEqual({{'abc','def'};{'ghi','jkl'}}, actual.list);
+        end
+        
+        function testShouldConvertString(~)
+           s.text = java.lang.String('hello');
+           m = ovation.struct2map(s);
+            
+            actual = ovation.map2struct(m);
+            
+            assertEqual('hello', actual.text);
         end
     end
 end
