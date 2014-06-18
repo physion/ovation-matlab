@@ -32,7 +32,10 @@ function contentType = content_type(path)
 
             customContentTypes.put('lsm', 'image/tiff');
             
-            customContentTypes.put('mat', 'application/x-matlab-octet-stream');
+            customContentTypes.put('mat', 'application/vnd.matlab-octet-stream');
+            
+            customContentTypes.put('pdf', 'application/pdf');
+            
             
             extension = FilenameUtils.getExtension(path);
             if customContentTypes.containsKey(extension)
