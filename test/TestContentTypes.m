@@ -16,7 +16,7 @@ classdef TestContentTypes < MatlabTestCase
         end
         
         function testMatlabMATType(self)
-            self.assertContentType('application/x-matlab-octet-stream', 'foo/bar/baz.mat');
+            self.assertContentType('application/vnd.matlab-octet-stream', 'foo/bar/baz.mat');
         end
                 
         function assertContentType(~, expected, file_path)
