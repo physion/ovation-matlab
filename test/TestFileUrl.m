@@ -9,7 +9,7 @@ classdef TestFileUrl < TestCase
         
         function testCreatesAbsoluteUrl(~)
             pth = '/path/to/file';
-            url = ovation.fileUrl(pth);
+            url = ovation.util.fileUrl(pth);
             assert(strcmp(url.getPath(), pth));
         end
     end
